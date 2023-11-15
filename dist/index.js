@@ -1,3 +1,6 @@
-import * as db from './db/db.js';
-const result = await db.query('select $1::text as name', ['Robin Singh']);
-console.log('result: ', result.rows);
+import express from 'express';
+import 'dotenv/config';
+const app = express();
+app.listen(process.env.PORT, () => {
+    console.log(`app is listeing on the port ${process.env.PORT}`);
+});
