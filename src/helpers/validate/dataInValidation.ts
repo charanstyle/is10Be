@@ -87,4 +87,13 @@ const dataInValidate = (data: dataProps) => {
   }
 }
 
+const validatorDictonary = {
+  email: 'email',
+  password: 'password',
+  confirm_password: 'password',
+  first_name: 'string',
+  last_name: 'string',
+  username: 'string'
+}
+
 export default dataInValidate

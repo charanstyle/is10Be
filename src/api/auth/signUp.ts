@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 export interface newUserDataProps {
   email: 'string'
   first_name: 'string'
@@ -9,10 +11,10 @@ export interface newUserDataProps {
 
 const signUp = async (newUserData: newUserDataProps) => {
   try {
-    const { email, first_name, last_name, dob, password, confirmPassword } =
+    const { email, first_name, last_name, password, confirmPassword } =
       newUserData
 
-    const dateNewFormat = {}
+    const dob = DateTime.fromISO(newUserData.dob).toFormat('yyyy-MM-dd')
   } catch (err) {
     console.log('error: ', err)
   }
