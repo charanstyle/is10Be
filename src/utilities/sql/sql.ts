@@ -15,9 +15,7 @@ export const sqlConstructor = (props: sqlProps) => {
   let sql = ``
   if (props.type.select) {
     sql = `${props.type} from ${props.table}`
-
     props.conditions ? (sql = `${sql} where ${props.conditions};`) : `${sql};`
-
     return sql
   }
 

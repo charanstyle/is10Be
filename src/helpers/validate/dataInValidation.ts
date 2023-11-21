@@ -1,25 +1,38 @@
 import validator from 'validator'
 
+const validatorDictonary = {
+  primary_email_address: 'email',
+  password: 'password',
+  confirm_password: 'password',
+  first_name: 'string',
+  last_name: 'string',
+  username: 'string',
+  date_of_birth: 'date'
+}
+
 interface dataProps {
   value: any
-  type: string
+  type: string | number
 }
 
 const dataInValidate = (data: dataProps) => {
   const { value, type } = data
 
-  switch (type) {
+  console.log('value received: ', value)
+  console.log('type received: ', type)
+
+  switch (Object(validatorDictonary)[`${type}`]) {
     case 'numeric':
       {
-        if (!validator.isNumeric(value))
+        if (!validator.isNumeric(value + ''))
           return {
             status: 'error',
-            message: `${value} should be numeric`,
+            message: `value should be numeric`,
             data: data
           }
       }
       break
-    case 'alphanumeric':
+    case 'string':
       {
         if (!validator.isAlphanumeric(value))
           return {
@@ -87,13 +100,16 @@ const dataInValidate = (data: dataProps) => {
   }
 }
 
-const validatorDictonary = {
-  email: 'email',
-  password: 'password',
-  confirm_password: 'password',
-  first_name: 'string',
-  last_name: 'string',
-  username: 'string'
+const objectValidator = (obj: any) => {
+  let newObject = {}
+  for (const key in obj) {
+    if (key) {
+      const test = dataInValidate({ value: obj[`${key}`], type: `${key}` })
+      console.log(test)
+      Object(newObject)[`${key}`] = obj[`${key}`]
+    }
+  }
+  return newObject
 }
 
-export default dataInValidate
+export default objectValidator
