@@ -1,11 +1,8 @@
-export type sqltypes = {
-  select: 'SELECT'
-  update: 'UPDATE'
-  delete: 'DELETE'
-}
+import { success, error } from '../../helpers/basic/statusMessages.js'
 
 export interface sqlProps {
-  type: sqltypes
+  type: string
+  fields?: string[]
   table: string
   values?: string[]
   conditions?: string
@@ -13,23 +10,31 @@ export interface sqlProps {
 
 export const sqlConstructor = (props: sqlProps) => {
   let sql = ``
-  if (props.type.select) {
-    sql = `${props.type} from ${props.table}`
-    props.conditions ? (sql = `${sql} where ${props.conditions};`) : `${sql};`
-    return sql
-  }
-
-  if (props.type.update) {
+  if (props.type === 'SELECT') {
+    if (props.fields) {
+      sql = `${props.type} ${props.fields?.join(', ')} from ${props.table}`
+      props.conditions ? (sql = `${sql} where ${props.conditions};`) : `${sql};`
+      return success(sql)
+    } else {
+      return error('selectable fields are missing')
+    }
+  } else if ((props.type = 'UPDATE')) {
     sql = `${props.type} ${props.table}`
     const arrayToCommaValues = props.values?.join(',')
     sql = `${sql} SET ${arrayToCommaValues}`
     props.conditions ? (sql = `${sql} where ${props.conditions};`) : `${sql};`
-    return sql
-  }
-
-  if (props.type.delete) {
+    return {
+      status: 'success',
+      message: sql
+    }
+  } else if (props.type === 'DELETE') {
     sql = `DELETE from ${props.table}`
     props.conditions ? `${sql} where ${props.conditions};` : `${sql};`
-    return sql
+    return {
+      status: 'success',
+      message: sql
+    }
+  } else {
+    return error('sql props type is missing')
   }
 }
